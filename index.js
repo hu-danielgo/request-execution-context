@@ -37,7 +37,11 @@ class ExecutionContext {
     this.#localStorage.enterWith(contextObject);
 
     if (req && typeof req.header === "function") {
-      this.setRequestId(req.header(this.#requestIdHeader));
+      if (this.#requestIdHeader)
+        this.setRequestId(req.header(this.#requestIdHeader));
+      else 
+        this.setRequestId(uuidv4());
+      
       Object.assign(this.#localStorage.getStore(), {
         requestContext: {
           socketIp: req.ip,
