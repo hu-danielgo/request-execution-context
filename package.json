@@ -1,0 +1,14 @@
+{
+  "name": "request-execution-context",
+  "version": "1.0.0",
+  "description": "A class and module design to store state for the duration of a request, useful for logging or other cross cutting concerns",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^8.1.0"
+  }
+}
