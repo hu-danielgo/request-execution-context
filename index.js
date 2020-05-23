@@ -26,3 +26,11 @@ module.exports.getCurrentContext = () => {
 
   return _instance.getCurrentContext();
 };
+
+module.exports.setIdentityForContext = (identity) => {
+  if (!_instance)
+    throw new Error(
+      "Execution Context Not Initialised - Run CreateInstance() First"
+    );
+  _instance.setIdentityForContext(identity);
+};
