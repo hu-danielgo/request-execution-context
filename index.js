@@ -64,7 +64,7 @@ class ExecutionContext {
 
 let _instance = null;
 const createInstance = function (realClientIpHeader, requestIdHeader) {
-  if (!this._instance)
+  if (!_instance)
     _instance = new ExecutionContext(realClientIpHeader, requestIdHeader);
 
   return _instance;
