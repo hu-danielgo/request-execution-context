@@ -32,32 +32,29 @@ class ExecutionContext {
     });
   }
 
-  createRequestContext(req) {
+  createRequestContext(req, res, next) {
     let contextObject = Object.create({});
     this.#localStorage.enterWith(contextObject);
 
-    if (req && typeof req.header === "function") {
-      if (this.#requestIdHeader)
-        this.setRequestId(req.header(this.#requestIdHeader));
-      else 
-        this.setRequestId(uuidv4());
-      
-      Object.assign(this.#localStorage.getStore(), {
-        requestContext: {
-          socketIp: req.ip,
-          hostname: req.hostname,
-          path: req.path,
-          forwardedFor: req.header("X-Forwarded-For"),
-          userAgent: req.header("User-Agent"),
-          ...(this.#realClientIpHeader &&
-            req.header(this.#realClientIpHeader) && {
-              realIp: this.#realClientIpHeader,
-            }),
-        },
-      });
-    } else {
-      this.setRequestId(uuidv4());
-    }
+    if (this.#requestIdHeader)
+      this.setRequestId(req.header(this.#requestIdHeader));
+    else this.setRequestId(uuidv4());
+
+    Object.assign(this.#localStorage.getStore(), {
+      requestContext: {
+        socketIp: req.ip,
+        hostname: req.hostname,
+        path: req.path,
+        forwardedFor: req.header("X-Forwarded-For"),
+        userAgent: req.header("User-Agent"),
+        ...(this.#realClientIpHeader &&
+          req.header(this.#realClientIpHeader) && {
+            realIp: this.#realClientIpHeader,
+          }),
+      },
+    });
+
+    next();
   }
 
   getCurrentContext() {
@@ -65,4 +62,12 @@ class ExecutionContext {
   }
 }
 
-module.exports = ExecutionContext;
+let _instance = null;
+const getInstance = function (realClientIpHeader, requestIdHeader) {
+  if (!this._instance)
+    _instance = new ExecutionContext(realClientIpHeader, requestIdHeader);
+
+  return _instance;
+};
+
+module.exports = (realClientIpHeader, requestIdHeader) => getInstance;
