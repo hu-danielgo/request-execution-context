@@ -32,5 +32,5 @@ module.exports.setIdentityForContext = (identity) => {
     throw new Error(
       "Execution Context Not Initialised - Run CreateInstance() First"
     );
-  _instance.setIdentityForContext(identity);
+  _instance.setIdentityContext(identity);
 };
