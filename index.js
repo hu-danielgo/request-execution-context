@@ -70,5 +70,8 @@ const createInstance = function (realClientIpHeader, requestIdHeader) {
   return _instance;
 };
 
-module.exports.createInstance = (realClientIpHeader, requestIdHeader) => createInstance(realClientIpHeader, requestIdHeader);
-module.exports.getInstance = () => _instance;
+module.exports.createInstance = (realClientIpHeader, requestIdHeader) =>
+  createInstance(realClientIpHeader, requestIdHeader);
+module.exports.getInstance = () => {
+  return _instance;
+};
