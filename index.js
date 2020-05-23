@@ -70,4 +70,4 @@ const getInstance = function (realClientIpHeader, requestIdHeader) {
   return _instance;
 };
 
-module.exports = (realClientIpHeader, requestIdHeader) => getInstance;
+module.exports = (realClientIpHeader, requestIdHeader) => getInstance(realClientIpHeader, requestIdHeader);
