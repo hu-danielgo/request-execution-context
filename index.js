@@ -63,11 +63,12 @@ class ExecutionContext {
 }
 
 let _instance = null;
-const getInstance = function (realClientIpHeader, requestIdHeader) {
+const createInstance = function (realClientIpHeader, requestIdHeader) {
   if (!this._instance)
     _instance = new ExecutionContext(realClientIpHeader, requestIdHeader);
 
   return _instance;
 };
 
-module.exports = (realClientIpHeader, requestIdHeader) => getInstance(realClientIpHeader, requestIdHeader);
+module.exports.createInstance = (realClientIpHeader, requestIdHeader) => createInstance(realClientIpHeader, requestIdHeader);
+module.exports.getInstance = () => _instance;
