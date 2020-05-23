@@ -1,17 +1,28 @@
 "use strict";
 
-const ExecutionContext = require('./ExecutionContext');
+const ExecutionContext = require("./ExecutionContext");
 
 let _instance = null;
 
-module.exports = {
-  createInstance: function (realClientIpHeader, requestIdHeader) {
-    if (!_instance)
-      _instance = new ExecutionContext(realClientIpHeader, requestIdHeader);
+module.exports.createInstance = (realClientIpHeader, requestIdHeader) => {
+  if (!_instance)
+    _instance = new ExecutionContext(realClientIpHeader, requestIdHeader);
+};
 
-    return _instance;
-  },
-  getInstance: function () {
-    return _instance;
-  },
+module.exports.runMiddleware = (req, res, next) => {
+  if (!_instance)
+    throw new Error(
+      "Execution Context Not Initialised - Run CreateInstance() First"
+    );
+
+  _instance.createRequestContext(req, res, next);
+};
+
+module.exports.getCurrentContext = () => {
+  if (!_instance)
+    throw new Error(
+      "Execution Context Not Initialised - Run CreateInstance() First"
+    );
+
+  return _instance.getCurrentContext();
 };
