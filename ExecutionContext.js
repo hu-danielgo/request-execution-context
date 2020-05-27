@@ -62,7 +62,7 @@ class ExecutionContext {
   }
 
   getCurrentContext() {
-    return this.#localStorage.getStore();
+    return this.#localStorage?.getStore();
   }
 }
 
