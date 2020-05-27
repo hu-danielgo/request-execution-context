@@ -19,12 +19,7 @@ module.exports.runMiddleware = (req, res, next) => {
 };
 
 module.exports.getCurrentContext = () => {
-  if (!_instance)
-    throw new Error(
-      "Execution Context Not Initialised - Run CreateInstance() First"
-    );
-
-  return _instance.getCurrentContext();
+  return _instance?.getCurrentContext();
 };
 
 module.exports.setIdentityForContext = (identity) => {
