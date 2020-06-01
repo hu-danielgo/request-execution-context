@@ -16,46 +16,38 @@ class ExecutionContext {
       throw new Error("AsyncLocalStorage not initialised");
 
     const executionRequestId = requestId || uuidv4();
-    Object.assign(this.#localStorage.getStore(), {
-      requestId: executionRequestId,
-    });
+    this.#localStorage.getStore().set('requestId', executionRequestId);
   }
 
   setIdentityContext(identityContext) {
     if (!this.#localStorage.getStore())
       throw new Error("AsyncLocalStorage not initialised");
 
-    Object.assign(this.#localStorage.getStore(), {
-      identityContext: identityContext,
-    });
+    this.#localStorage.getStore().set('identityContext', identityContext);
   }
 
   createRequestContext(req, res, next) {
-    let contextObject = Object.create({});
+    let contextObject = new Map();
     this.#localStorage.enterWith(contextObject);
 
     if (this.#requestIdHeader)
       this.setRequestId(req.header(this.#requestIdHeader));
     else this.setRequestId(uuidv4());
 
-    Object.assign(this.#localStorage.getStore(), {
-      requestContext: {
-        socketIp: req.ip,
-        hostname: req.hostname,
-        path: req.path,
-        forwardedFor: req.header("X-Forwarded-For"),
-        userAgent: req.header("User-Agent"),
-        ...(this.#realClientIpHeader &&
-          req.header(this.#realClientIpHeader) && {
-            realIp: this.#realClientIpHeader,
-          }),
-      },
+    this.#localStorage.getStore().set('requestContext', {
+      socketIp: req.ip,
+      hostname: req.hostname,
+      path: req.path,
+      forwardedFor: req.header("X-Forwarded-For"),
+      userAgent: req.header("User-Agent"),
+      ...(this.#realClientIpHeader &&
+        req.header(this.#realClientIpHeader) && {
+          realIp: this.#realClientIpHeader,
+        }),
     });
 
     if (req.user) {
-      Object.assign(this.#localStorage.getStore(), {
-        identityContext: req.user,
-      });
+      this.setIdentityContext(req.user);
     }
 
     next();
