@@ -40,6 +40,8 @@ class ExecutionContext {
       path: req.path,
       forwardedFor: req.header("X-Forwarded-For"),
       userAgent: req.header("User-Agent"),
+      traceparent: req.header("traceparent"),
+      tracestate: req.header("tracestate"),
       ...(this.#realClientIpHeader &&
         req.header(this.#realClientIpHeader) && {
           realIp: this.#realClientIpHeader,
