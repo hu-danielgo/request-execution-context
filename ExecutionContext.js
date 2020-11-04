@@ -44,7 +44,7 @@ class ExecutionContext {
       tracestate: req.header("tracestate"),
       ...(this.#realClientIpHeader &&
         req.header(this.#realClientIpHeader) && {
-          realIp: this.#realClientIpHeader,
+          realIp: req.header(this.#realClientIpHeader),
         }),
     });
 
